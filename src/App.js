@@ -96,7 +96,7 @@ function App() {
             }}
           />
         </div>
-        {isFetching ? <p>Fetching data...</p> : <></>}
+        {isFetching ? <p>Refreshing data...</p> : <></>}
         {data.length ? (
           <>
             <p>Data received:</p>
