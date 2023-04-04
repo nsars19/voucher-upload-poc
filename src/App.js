@@ -82,7 +82,7 @@ function App() {
             </button>
           </div>
           <input
-            placeholder="send some data to the api"
+            placeholder="Send some data to the api!"
             value={bodyData}
             onChange={(e) => {
               console.log(e.target.value);
