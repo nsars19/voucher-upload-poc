@@ -62,7 +62,7 @@ function App() {
             linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%)`,
               }}
             >
-              Refresh Data
+              Get a joke
             </button>
             <button
               onClick={clearData}
@@ -78,10 +78,10 @@ function App() {
                 cursor: "pointer",
               }}
             >
-              Clear Data
+              Clear
             </button>
           </div>
-          <input
+          {/* <input
             placeholder="Send some data to the api!"
             value={bodyData}
             onChange={(e) => {
@@ -94,12 +94,11 @@ function App() {
               border: "none",
               padding: 8,
             }}
-          />
+          /> */}
         </div>
         {isFetching ? <p>Refreshing data...</p> : <></>}
         {data.length ? (
           <>
-            <p>Data received:</p>
             <div style={{ display: "flex", flexDirection: "row" }}>
               {data.map((x) => (
                 <p key={Math.random().toString()}>{x}</p>
