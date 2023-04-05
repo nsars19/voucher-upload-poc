@@ -62,7 +62,7 @@ function App() {
             linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%)`,
               }}
             >
-              Get a joke
+              Get a cat fact
             </button>
             <button
               onClick={clearData}
