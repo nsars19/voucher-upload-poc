@@ -8,7 +8,6 @@ function App() {
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
-    console.log(bodyData);
     const res = await fetch(
       "https://pwsz5aju5f.execute-api.us-east-1.amazonaws.com/dev/data",
       {
