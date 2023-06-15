@@ -7,7 +7,6 @@ function App() {
   const [bodyData, setBodyData] = useState("");
 
   const fetchData = useCallback(async () => {
-    console.log("fetching data");
     setIsFetching(true);
     console.log(bodyData);
     const res = await fetch(
