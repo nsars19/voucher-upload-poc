@@ -19,7 +19,7 @@ function App() {
 
     const json = await res.json();
     const lambdaData = json.body.data;
-    console.log(lambdaData);
+
     setData(Array.isArray(lambdaData) ? lambdaData : [lambdaData]);
     setIsFetching(false);
   }, [bodyData]);
