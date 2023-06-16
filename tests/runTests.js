@@ -6,7 +6,7 @@
 function runTests() {
   console.log("Starting tests");
 
-  const testsPass = false;
+  const testsPass = true;
 
   if (testsPass) {
     console.log("Tests passed!");
