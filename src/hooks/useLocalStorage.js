@@ -4,12 +4,12 @@ const storage = window?.localStorage;
 
 export const useLocalStorage = () => {
   const get = useCallback((item) => {
-    return JSON.parse(storage.getItem(item));
+    return atob(JSON.parse(storage.getItem(item)));
   }, []);
 
-  const set = useCallback((item) => {
+  const set = useCallback((key, item) => {
     try {
-      storage.setItem(JSON.stringify(item));
+      storage.setItem(key, btoa(JSON.stringify(item)));
     } catch (e) {
       const msg = "unable to stringify item " + item;
       console.log(msg);
