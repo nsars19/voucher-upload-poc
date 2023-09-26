@@ -36,7 +36,7 @@ export const useAuth = () => {
   }, [params]);
 
   useEffect(() => {
-    if (storage.get("cognitoToken")) {
+    if (storage.has("cognitoToken")) {
       setIsLoggedIn(true);
     } else if (!isLoggedIn && params?.has("code")) {
       getToken();

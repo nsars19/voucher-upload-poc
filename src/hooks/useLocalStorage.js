@@ -10,10 +10,14 @@ export const useLocalStorage = () => {
   }, []);
 
   const get = useCallback((item) => {
-    if (item in storage) {
-      return JSON.parse(base64Decode(storage.getItem(item)) || "");
-    } else {
-      return null;
+    try {
+      if (item in storage) {
+        return JSON.parse(base64Decode(storage.getItem(item)));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw new Error("Error fetching data from storage. ", e);
     }
   }, []);
 
