@@ -21,7 +21,7 @@ export const useAuth = () => {
     if (!isLoggedIn && params?.has("code")) {
       // get tokens and store them
       cognito.getToken(params.get("code")).then((tokenData) => {
-        storage.set("cognitoToken", tokenData);
+        storage.set("cognitoToken", tokenData.data);
       });
       setIsLoggedIn(true);
     }
