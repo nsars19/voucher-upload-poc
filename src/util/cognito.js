@@ -3,7 +3,7 @@ export class Cognito {
   clientId = "1qq369qvpm8gk73gmatgo72qa0";
   responseType = "code";
   scope = "email openid phone profile";
-  redirectURI = "https://d1f7ykf17cxubq.cloudfront.net/";
+  redirectURI = "https://d1f7ykf17cxubq.cloudfront.net";
 
   params =
     "?" +
