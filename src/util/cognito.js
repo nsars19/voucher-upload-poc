@@ -16,34 +16,31 @@ export class Cognito {
 
   basePath = "/oauth2";
   paths = {
-    authorize: { path: "/authorize", method: "GET" },
-    userInfo: { path: "/userInfo", method: "GET" },
-    token: { path: "/token", method: "POST" },
+    authorize: "/authorize",
+    userInfo: "/userInfo",
+    token: "/token",
   };
 
   cognitoOAuthURL = this.host + this.basePath;
-  authenticateURL =
-    this.cognitoOAuthURL + this.paths.authorize.path + this.params;
-  tokenURL = this.cognitoOAuthURL + this.paths.token.path;
+  authenticateURL = this.cognitoOAuthURL + this.paths.authorize + this.params;
+  tokenURL = this.cognitoOAuthURL + this.paths.token;
+  userInfoURL = this.cognitoOAuthURL + this.paths.userInfo;
 
   async getToken(code) {
     if (!code) throw new Error("No `code` provided");
     try {
-      const response = await fetch(
-        this.cognitoOAuthURL + this.paths.token.path,
-        {
-          method: this.paths.token.method,
-          headers: {
-            "Content-Type": "application/x-www-url-formencoded",
-          },
-          body: new URLSearchParams({
-            grant_type: "authorization_code",
-            client_id: this.clientId,
-            redirect_uri: this.redirectURI,
-            code,
-          }),
-        }
-      );
+      const response = await fetch(this.cognitoOAuthURL + this.paths.token, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-url-formencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: this.clientId,
+          redirect_uri: this.redirectURI,
+          code,
+        }),
+      });
 
       const responseData = await response.json();
 
