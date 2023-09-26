@@ -4,7 +4,7 @@ const storage = window?.localStorage;
 
 export const useLocalStorage = () => {
   const get = useCallback((item) => {
-    return atob(JSON.parse(storage.getItem(item)));
+    return JSON.parse(atob(storage.getItem(item)));
   }, []);
 
   const set = useCallback((key, item) => {
