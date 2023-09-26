@@ -36,7 +36,7 @@ export class Cognito {
         },
         body: JSON.stringify({
           grant_type: "authorization_code",
-          client_id: this.client_id,
+          client_id: this.clientId,
           redirect_uri: this.redirectURI,
           code,
         }),
