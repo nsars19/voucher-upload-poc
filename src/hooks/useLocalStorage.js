@@ -5,9 +5,20 @@ const base64Encode = btoa;
 const base64Decode = atob;
 
 export const useLocalStorage = () => {
-  const get = useCallback((item) => {
-    return JSON.parse(base64Decode(storage.getItem(item)));
+  const has = useCallback((key) => {
+    return storage.hasOwnProperty(key);
   }, []);
+
+  const get = useCallback(
+    (item) => {
+      if (has(item)) {
+        return JSON.parse(base64Decode(storage.getItem(item)));
+      } else {
+        return null;
+      }
+    },
+    [has]
+  );
 
   const set = useCallback((key, item) => {
     try {
@@ -22,5 +33,6 @@ export const useLocalStorage = () => {
   return {
     get,
     set,
+    has,
   };
 };
