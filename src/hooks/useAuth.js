@@ -27,6 +27,10 @@ export const useAuth = () => {
     }
   }, [isLoggedIn, params, cognito, storage]);
 
+  useEffect(() => {
+    console.log(storage.get("cognitoToken"));
+  });
+
   return {
     isLoggedIn,
     authenticateURL: cognito.authenticateURL,
