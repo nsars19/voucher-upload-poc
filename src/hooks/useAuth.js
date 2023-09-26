@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useCognito from "./useCognito";
 import { useLocalStorage } from "./useLocalStorage";
 
@@ -7,6 +7,17 @@ export const useAuth = () => {
   const [params, setParams] = useState();
   const cognito = useCognito();
   const storage = useLocalStorage();
+
+  const getToken = useCallback(() => {
+    cognito.getToken(params.get("code")).then((tokenData) => {
+      if (tokenData.error) {
+        throw new Error("Error authenticating");
+      }
+
+      storage.set("cognitoToken", tokenData.data);
+      setIsLoggedIn(true);
+    });
+  }, [cognito, params, storage]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -25,18 +36,12 @@ export const useAuth = () => {
   }, [params]);
 
   useEffect(() => {
-    if (!isLoggedIn && params?.has("code")) {
-      // get tokens and store them
-      cognito.getToken(params.get("code")).then((tokenData) => {
-        storage.set("cognitoToken", tokenData.data);
-      });
+    if (storage.get("cognitoToken")) {
       setIsLoggedIn(true);
+    } else if (!isLoggedIn && params?.has("code")) {
+      getToken();
     }
-  }, [isLoggedIn, params, cognito, storage]);
-
-  useEffect(() => {
-    console.log(storage.get("cognitoToken"));
-  });
+  }, [getToken, isLoggedIn, params, storage]);
 
   return {
     isLoggedIn,
