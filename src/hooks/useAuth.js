@@ -18,10 +18,12 @@ export const useAuth = () => {
   useEffect(() => {
     if (!isLoggedIn && params?.has("code")) {
       // get tokens and store them
-
+      cognito.getToken(params.get("code")).then((tokenData) => {
+        console.log(tokenData);
+      });
       setIsLoggedIn(true);
     }
-  }, [isLoggedIn, params]);
+  }, [isLoggedIn, params, cognito]);
 
   return {
     isLoggedIn,
