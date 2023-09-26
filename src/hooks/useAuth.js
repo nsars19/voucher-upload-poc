@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Cognito } from "../util/cognito";
-
-const cognito = new Cognito();
+import useCognito from "./useCognito";
 
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [params, setParams] = useState();
+  const cognito = useCognito();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
