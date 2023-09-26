@@ -36,7 +36,7 @@ export class Cognito {
           headers: {
             "Content-Type": "application/x-www-url-formencoded",
           },
-          body: JSON.stringify({
+          body: new URLSearchParams({
             grant_type: "authorization_code",
             client_id: this.clientId,
             redirect_uri: this.redirectURI,
