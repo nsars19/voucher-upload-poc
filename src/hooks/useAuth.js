@@ -11,11 +11,19 @@ export const useAuth = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has("code")) {
+    if (urlParams.has("code") && !params) {
       setParams(urlParams);
-      window.history.replaceState({}, document.title); // remove params w/o refresh
+
+      const newurl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname +
+        "?myNewUrlQuery=1";
+
+      window.history.pushState({ path: newurl }, "", newurl);
     }
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     if (!isLoggedIn && params?.has("code")) {
