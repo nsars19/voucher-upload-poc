@@ -5,10 +5,12 @@ import { useLocalStorage } from "./useLocalStorage";
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [params, setParams] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const cognito = useCognito();
   const storage = useLocalStorage();
 
   const getToken = useCallback(() => {
+    setIsLoading(true);
     cognito.getToken(params.get("code")).then((tokenData) => {
       if (tokenData.error) {
         throw new Error("Error authenticating");
@@ -16,6 +18,7 @@ export const useAuth = () => {
 
       storage.set("cognitoToken", tokenData.data);
       setIsLoggedIn(true);
+      setIsLoading(false);
     });
   }, [cognito, params, storage]);
 
@@ -45,6 +48,7 @@ export const useAuth = () => {
 
   return {
     isLoggedIn,
+    isAuthenticating: isLoading,
     authenticateURL: cognito.authenticateURL,
   };
 };
