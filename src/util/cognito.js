@@ -29,10 +29,10 @@ export class Cognito {
   async getToken(code) {
     if (!code) throw new Error("No `code` provided");
     try {
-      const response = await fetch(this.cognitoOAuthURL + this.paths.token, {
+      const response = await fetch(this.tokenURL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-url-formencoded",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
           grant_type: "authorization_code",
