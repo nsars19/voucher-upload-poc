@@ -9,16 +9,13 @@ export const useLocalStorage = () => {
     return storage.hasOwnProperty(key);
   }, []);
 
-  const get = useCallback(
-    (item) => {
-      if (has(item)) {
-        return JSON.parse(base64Decode(storage.getItem(item)));
-      } else {
-        return null;
-      }
-    },
-    [has]
-  );
+  const get = useCallback((item) => {
+    if (item in storage) {
+      return JSON.parse(base64Decode(storage.getItem(item)) || "");
+    } else {
+      return null;
+    }
+  }, []);
 
   const set = useCallback((key, item) => {
     try {
