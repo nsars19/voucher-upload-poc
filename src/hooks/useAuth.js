@@ -18,8 +18,7 @@ export const useAuth = () => {
         window.location.protocol +
         "//" +
         window.location.host +
-        window.location.pathname +
-        "?myNewUrlQuery=1";
+        window.location.pathname;
 
       window.history.pushState({ path: newurl }, "", newurl);
     }
