@@ -12,8 +12,8 @@ export const useAuth = () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.has("code")) {
-      console.log("found code: ", urlParams.get("code"));
       setParams(urlParams);
+      window.history.replaceState({}, document.title); // remove params w/o refresh
     }
   }, []);
 
