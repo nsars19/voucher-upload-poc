@@ -1,4 +1,4 @@
-export default function Login({ url }) {
+export default function Login({ url, hasError }) {
   return (
     <span
       style={{
@@ -17,6 +17,11 @@ export default function Login({ url }) {
       >
         Login
       </a>
+      {hasError ? (
+        <p style={{ fontSize: ".8em", color: "#cc1234" }}>Error signing in</p>
+      ) : (
+        <></>
+      )}
     </span>
   );
 }

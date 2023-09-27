@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 const storage = window?.localStorage;
 const base64Encode = btoa;
@@ -31,9 +31,14 @@ export const useLocalStorage = () => {
     }
   }, []);
 
-  return {
-    get,
-    set,
-    has,
-  };
+  const storageMethods = useMemo(
+    () => ({
+      get,
+      set,
+      has,
+    }),
+    [get, set, has]
+  );
+
+  return storageMethods;
 };

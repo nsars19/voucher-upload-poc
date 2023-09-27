@@ -12,7 +12,7 @@ function App() {
   } else if (auth.isAuthenticating) {
     return <SigningIn />;
   } else {
-    return <Login url={auth.authenticateURL} />;
+    return <Login url={auth.authenticateURL} hasError={auth.hasError} />;
   }
 }
 

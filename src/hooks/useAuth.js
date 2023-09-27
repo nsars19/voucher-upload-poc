@@ -2,24 +2,34 @@ import { useCallback, useEffect, useState } from "react";
 import useCognito from "./useCognito";
 import { useLocalStorage } from "./useLocalStorage";
 
+let didInit = false;
+
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [params, setParams] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const cognito = useCognito();
   const storage = useLocalStorage();
 
   const getToken = useCallback(() => {
     setIsLoading(true);
-    cognito.getToken(params.get("code")).then((tokenData) => {
-      if (tokenData.error) {
-        throw new Error("Error authenticating");
-      }
+    cognito
+      .getToken(params.get("code"))
+      .then((tokenData) => {
+        if (tokenData.error) {
+          throw new Error("Error authenticating");
+        }
 
-      storage.set("cognitoToken", tokenData.data);
-      setIsLoggedIn(true);
-      setIsLoading(false);
-    });
+        storage.set("cognitoToken", tokenData.data);
+        setIsLoggedIn(true);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setIsLoading(false);
+        setHasError(true);
+      });
   }, [cognito, params, storage]);
 
   useEffect(() => {
@@ -41,13 +51,17 @@ export const useAuth = () => {
   useEffect(() => {
     if (storage.has("cognitoToken")) {
       setIsLoggedIn(true);
-    } else if (!isLoggedIn && params?.has("code")) {
+    } else if (hasError) {
+      return;
+    } else if (!didInit && !isLoggedIn && params?.has("code")) {
       getToken();
+      didInit = true;
     }
-  }, [getToken, isLoggedIn, params, storage]);
+  }, [getToken, isLoggedIn, params, storage, hasError]);
 
   return {
     isLoggedIn,
+    hasError,
     isAuthenticating: isLoading,
     authenticateURL: cognito.authenticateURL,
   };

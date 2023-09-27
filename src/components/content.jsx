@@ -1,9 +1,14 @@
 import { useCallback, useState } from "react";
+import useToken from "../hooks/useToken";
 
 export default function Content() {
   const [data, setData] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [bodyData, setBodyData] = useState("");
+
+  const { idToken } = useToken();
+  const userFirstname = idToken.payload["custom:givenname"];
+  const userSurname = idToken.payload["custom:sn"];
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -32,6 +37,15 @@ export default function Content() {
   return (
     <div className="App">
       <header className="App-header">
+        {userFirstname ? (
+          <span style={{ position: "absolute", top: "0", left: "0" }}>
+            <p style={{ padding: "0 0 0 1.2em", fontSize: ".6em" }}>
+              Signed in as: {userFirstname} {userSurname}
+            </p>
+          </span>
+        ) : (
+          <></>
+        )}
         <div style={{ display: "flex", gap: 8, flexDirection: "column" }}>
           <div
             style={{
