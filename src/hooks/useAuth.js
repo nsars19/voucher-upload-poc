@@ -32,6 +32,13 @@ export const useAuth = () => {
       });
   }, [cognito, params, storage]);
 
+  const signOut = () => {
+    storage.remove("cognitoToken");
+    setIsLoggedIn(false);
+    setParams(null);
+    window.location.href = window.location.href;
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -62,6 +69,7 @@ export const useAuth = () => {
   return {
     isLoggedIn,
     hasError,
+    signOut,
     isAuthenticating: isLoading,
     authenticateURL: cognito.authenticateURL,
   };

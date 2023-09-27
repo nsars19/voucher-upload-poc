@@ -7,16 +7,8 @@ export default function Login({ url, hasError }) {
         alignItems: "center",
         height: "100vh",
       }}
-      className="App-header"
     >
-      <a
-        href={url}
-        style={{
-          color: "lightblue",
-        }}
-      >
-        Login
-      </a>
+      <a href={url}>Login</a>
       {hasError ? (
         <p style={{ fontSize: ".8em", color: "#cc1234" }}>Error signing in</p>
       ) : (

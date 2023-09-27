@@ -31,13 +31,18 @@ export const useLocalStorage = () => {
     }
   }, []);
 
+  const remove = useCallback((item) => {
+    storage.removeItem(item);
+  }, []);
+
   const storageMethods = useMemo(
     () => ({
       get,
       set,
       has,
+      remove,
     }),
-    [get, set, has]
+    [get, set, has, remove]
   );
 
   return storageMethods;

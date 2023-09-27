@@ -11,7 +11,8 @@ export default function SigningIn() {
     >
       <span
         style={{
-          color: "lightblue",
+          color: "#61dafb",
+          fontSize: "2em",
         }}
       >
         Logging in

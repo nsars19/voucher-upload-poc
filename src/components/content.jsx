@@ -1,23 +1,24 @@
 import { useCallback, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 import useToken from "../hooks/useToken";
 
 export default function Content() {
   const [data, setData] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-  const [bodyData, setBodyData] = useState("");
 
+  const auth = useAuth();
   const { idToken } = useToken();
   const userFirstname = idToken.payload["custom:givenname"];
   const userSurname = idToken.payload["custom:sn"];
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
+    setData([]);
     const res = await fetch(
       "https://pwsz5aju5f.execute-api.us-east-1.amazonaws.com/dev/data",
       {
-        method: "post",
-        body: JSON.stringify({ data: bodyData }),
-        headers: { "x-api-key": "EUc0IBdwvx76YcSAXBYAa2MQCRp1zI8jayfVJlJi" },
+        method: "get",
+        headers: { Authorization: "Bearer " + idToken.token },
       }
     );
 
@@ -26,86 +27,119 @@ export default function Content() {
 
     setData(Array.isArray(lambdaData) ? lambdaData : [lambdaData]);
     setIsFetching(false);
-  }, [bodyData]);
+  }, [idToken.token]);
 
   const clearData = useCallback(() => {
     setData([]);
     setIsFetching(false);
-    setBodyData("");
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div
+      style={{ background: "#282c34", color: "white", margin: "15px 10px " }}
+    >
+      <span
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
         {userFirstname ? (
-          <span style={{ position: "absolute", top: "0", left: "0" }}>
-            <p style={{ padding: "0 0 0 1.2em", fontSize: ".6em" }}>
+          <div style={{ margin: "0" }}>
+            <p>
               Signed in as: {userFirstname} {userSurname}
             </p>
-          </span>
+          </div>
         ) : (
           <></>
         )}
-        <div style={{ display: "flex", gap: 8, flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 10,
-              justifyContent: "space-between",
-              width: "300",
-            }}
-          >
-            <button
-              onClick={fetchData}
-              disabled={isFetching}
-              style={{
-                padding: 8,
-                borderRadius: 4,
-                border: "none",
-                height: 60,
-                width: 120,
-                fontSize: "16px",
-                color: "#eee",
-                cursor: "pointer",
-                background: `linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+        <button
+          style={{
+            padding: 8,
+            borderRadius: 4,
+            border: "none",
+            height: 60,
+            width: 120,
+            fontSize: "16px",
+            color: "#eee",
+            cursor: "pointer",
+            background: "linear-gradient(120deg, lightskyblue, purple)",
+          }}
+          onClick={() => auth.signOut()}
+        >
+          Log Out
+        </button>
+        <button
+          onClick={fetchData}
+          disabled={isFetching}
+          style={{
+            padding: 8,
+            borderRadius: 4,
+            border: "none",
+            height: 60,
+            width: 120,
+            fontSize: "16px",
+            color: "#eee",
+            cursor: "pointer",
+            background: `linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
             linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
             linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%)`,
-              }}
-            >
-              Get a cat fact
-            </button>
-            <button
-              onClick={clearData}
-              style={{
-                background: "linear-gradient(#e66465, #9198e5)",
-                padding: 8,
-                borderRadius: 4,
-                border: "none",
-                height: 60,
-                width: 120,
-                fontSize: "16px",
-                color: "#eee",
-                cursor: "pointer",
-              }}
-            >
-              Clear
-            </button>
-          </div>
-        </div>
+          }}
+        >
+          Get a cat fact
+        </button>
+        <button
+          onClick={clearData}
+          style={{
+            background: "linear-gradient(#e66465, #9198e5)",
+            padding: 8,
+            borderRadius: 4,
+            border: "none",
+            height: 60,
+            width: 120,
+            fontSize: "16px",
+            color: "#eee",
+            cursor: "pointer",
+          }}
+        >
+          Clear
+        </button>
+      </span>
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          position: "absolute",
+          inset: "0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          pointerEvents: "none",
+          fontSize: "2em",
+          flexDirection: "column",
+        }}
+      >
         {isFetching ? <p>Refreshing data...</p> : <></>}
         {data.length ? (
           <>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                fontSize: "1em",
+                maxWidth: "1000px",
+              }}
+            >
               {data.map((x) => (
-                <p key={Math.random().toString()}>{x}</p>
+                <p key={x}>{x}</p>
               ))}
             </div>
           </>
         ) : (
           <></>
         )}
-      </header>
+      </div>
     </div>
   );
 }

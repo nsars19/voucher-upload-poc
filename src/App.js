@@ -1,4 +1,3 @@
-import "./App.css";
 import Content from "./components/content";
 import Login from "./components/login";
 import SigningIn from "./components/signingIn";
