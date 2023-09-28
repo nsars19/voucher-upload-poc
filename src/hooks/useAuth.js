@@ -6,6 +6,15 @@ import useToken from "./useToken";
 let didInit = false;
 
 const APIGroup = "GetCatFact";
+const userFields = {
+  firstName: "custom:givenname",
+  lastName: "custom:sn",
+  campus: "custom:umasscampus",
+  guid: "custom:guid",
+  displayName: "custom:displayname",
+  emplid: "custom:emplid",
+  email: "email",
+};
 
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,6 +60,17 @@ export const useAuth = () => {
     return cognito.getUserGroups(idToken.payload).includes(APIGroup);
   }, [cognito, idToken]);
 
+  const getAuthToken = useCallback(() => {
+    return idToken.token;
+  }, [idToken]);
+
+  const getUserProperties = useCallback(() => {
+    return Object.entries(userFields).reduce((acc, [key, value]) => {
+      acc[key] = idToken.payload[value];
+      return acc;
+    }, {});
+  }, [idToken]);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -83,6 +103,8 @@ export const useAuth = () => {
     hasError,
     signOut,
     userCanAccessAPI,
+    getAuthToken,
+    getUserProperties,
     isAuthenticating: isLoading,
     authenticateURL: cognito.authenticateURL,
   };

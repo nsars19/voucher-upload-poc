@@ -1,15 +1,12 @@
 import { useCallback, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import useToken from "../hooks/useToken";
 
 export default function Content() {
   const [data, setData] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
   const auth = useAuth();
-  const { idToken } = useToken();
-  const userFirstname = idToken.payload["custom:givenname"];
-  const userSurname = idToken.payload["custom:sn"];
+  const user = auth.getUserProperties();
 
   const fetchData = useCallback(async () => {
     setIsFetching(true);
@@ -18,7 +15,7 @@ export default function Content() {
       "https://pwsz5aju5f.execute-api.us-east-1.amazonaws.com/dev/data",
       {
         method: "get",
-        headers: { Authorization: "Bearer " + idToken.token },
+        headers: { Authorization: "Bearer " + auth.getAuthToken() },
       }
     );
 
@@ -27,7 +24,7 @@ export default function Content() {
 
     setData(Array.isArray(lambdaData) ? lambdaData : [lambdaData]);
     setIsFetching(false);
-  }, [idToken.token]);
+  }, [auth]);
 
   const clearData = useCallback(() => {
     setData([]);
@@ -45,10 +42,10 @@ export default function Content() {
           gap: "8px",
         }}
       >
-        {userFirstname ? (
+        {user.firstName ? (
           <div style={{ margin: "0" }}>
             <p>
-              Signed in as: {userFirstname} {userSurname}
+              Signed in as: {user.firstName} {user.lastName}
             </p>
           </div>
         ) : (

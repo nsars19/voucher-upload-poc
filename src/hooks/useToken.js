@@ -10,7 +10,12 @@ export default function useToken() {
   const tokens = useMemo(() => {
     const cognitoTokens = storage.get("cognitoToken");
 
-    if (!cognitoTokens) return {};
+    if (!cognitoTokens)
+      return {
+        idToken: null,
+        accessToken: null,
+        refreshToken: null,
+      };
 
     console.log(cognitoTokens);
 
