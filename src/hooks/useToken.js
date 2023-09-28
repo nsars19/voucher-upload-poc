@@ -9,6 +9,9 @@ export default function useToken() {
 
   const tokens = useMemo(() => {
     const cognitoTokens = storage.get("cognitoToken");
+
+    if (!cognitoTokens) return {};
+
     console.log(cognitoTokens);
 
     const [idHeader, idPayload, idSignature] =

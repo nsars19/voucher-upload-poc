@@ -57,4 +57,12 @@ export class Cognito {
       };
     }
   }
+
+  getUserGroups(token) {
+    if (!("cognito:groups" in token)) {
+      return [];
+    }
+
+    return token["cognito:groups"];
+  }
 }

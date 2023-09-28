@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import useCognito from "./useCognito";
 import { useLocalStorage } from "./useLocalStorage";
+import useToken from "./useToken";
 
 let didInit = false;
+
+const APIGroup = "GetCatFact";
 
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,6 +14,7 @@ export const useAuth = () => {
   const [hasError, setHasError] = useState(false);
   const cognito = useCognito();
   const storage = useLocalStorage();
+  const { idToken } = useToken();
 
   const getToken = useCallback(() => {
     setIsLoading(true);
@@ -38,6 +42,14 @@ export const useAuth = () => {
     setParams(null);
     window.location.href = window.location.href;
   };
+
+  const userCanAccessAPI = useCallback(() => {
+    if (!idToken) {
+      throw new Error("No token found");
+    }
+
+    return cognito.getUserGroups(idToken.payload).includes(APIGroup);
+  }, [cognito, idToken]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -70,6 +82,7 @@ export const useAuth = () => {
     isLoggedIn,
     hasError,
     signOut,
+    userCanAccessAPI,
     isAuthenticating: isLoading,
     authenticateURL: cognito.authenticateURL,
   };
