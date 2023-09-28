@@ -4,7 +4,7 @@ const storage = window?.localStorage;
 const base64Encode = btoa;
 const base64Decode = atob;
 
-export const useLocalStorage = () => {
+export const useStorage = () => {
   const has = useCallback((key) => {
     return storage.hasOwnProperty(key);
   }, []);

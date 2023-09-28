@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+import { useStorage } from "./useStorage";
 
 const base64Decode = atob;
 const decode = (item) => JSON.parse(base64Decode(item));
 
 export default function useToken() {
-  const storage = useLocalStorage();
+  const storage = useStorage();
 
   const tokens = useMemo(() => {
     const cognitoTokens = storage.get("cognitoToken");

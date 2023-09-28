@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useCognito from "./useCognito";
-import { useLocalStorage } from "./useLocalStorage";
+import { useStorage } from "./useStorage";
 import useToken from "./useToken";
 
 let didInit = false;
@@ -22,7 +22,7 @@ export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const cognito = useCognito();
-  const storage = useLocalStorage();
+  const storage = useStorage();
   const { idToken } = useToken();
 
   const getToken = useCallback(() => {
