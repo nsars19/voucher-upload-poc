@@ -17,8 +17,6 @@ export default function useToken() {
         refreshToken: null,
       };
 
-    console.log(cognitoTokens);
-
     const [idHeader, idPayload, idSignature] =
       cognitoTokens.id_token.split(".");
 

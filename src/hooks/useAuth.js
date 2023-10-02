@@ -29,13 +29,20 @@ export const useAuth = () => {
     setIsLoading(true);
     cognito
       .getToken(params.get("code"))
-      .then((tokenData) => {
+      .then(async (tokenData) => {
         if (tokenData.error) {
           throw new Error("Error authenticating");
         }
 
-        storage.set("cognitoToken", tokenData.data);
-        setIsLoggedIn(true);
+        const { id_token: idToken, access_token: accessToken } = tokenData.data;
+        const isAccessTokenValid = await cognito.verifyAccessToken(accessToken);
+        const isIdTokenValid = await cognito.verifyIdToken(idToken);
+
+        if (isAccessTokenValid.isValid && isIdTokenValid.isValid) {
+          storage.set("cognitoToken", tokenData.data);
+          setIsLoggedIn(true);
+        }
+
         setIsLoading(false);
       })
       .catch((e) => {

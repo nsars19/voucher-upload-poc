@@ -1,6 +1,9 @@
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+
 export class Cognito {
   host = "https://webdev-poc.auth.us-east-1.amazoncognito.com";
   clientId = "1qq369qvpm8gk73gmatgo72qa0";
+  userPoolId = "us-east-1_5ZTuRKRqv";
   responseType = "code";
   scope = "email openid phone profile";
   redirectURI = "https://d1f7ykf17cxubq.cloudfront.net";
@@ -25,6 +28,36 @@ export class Cognito {
   authenticateURL = this.cognitoOAuthURL + this.paths.authorize + this.params;
   tokenURL = this.cognitoOAuthURL + this.paths.token;
   userInfoURL = this.cognitoOAuthURL + this.paths.userInfo;
+
+  _getVerifier(tokenType) {
+    return CognitoJwtVerifier.create({
+      userPoolId: this.userPoolId,
+      tokenUse: tokenType, // 'id' or 'access'
+      clientId: this.clientId,
+    });
+  }
+
+  async _verify(type, token) {
+    try {
+      return {
+        isValid: true,
+        payload: await this._getVerifier(type).verify(token),
+      };
+    } catch (e) {
+      return {
+        isValid: false,
+        payload: null,
+      };
+    }
+  }
+
+  async verifyIdToken(token) {
+    return this._verify("id", token);
+  }
+
+  async verifyAccessToken(token) {
+    return this._verify("access", token);
+  }
 
   async getToken(code) {
     if (!code) throw new Error("No `code` provided");
